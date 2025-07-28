@@ -1,0 +1,9 @@
+[package]
+name = "rmote"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0.98"
+librsync = "0.2.3"
+ssh2 = { version = "0.9.5", features = ["vendored-openssl"] }
