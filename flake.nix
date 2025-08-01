@@ -1,27 +1,49 @@
 {
-  description = "A very basic flake";
+  description = "SFTP sync tool";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; 
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    gitignore = { url = "github:hercules-ci/gitignore.nix"; flake = false; };
   };
 
-  outputs = inputs@{ self, nixpkgs, flake-utils, ... }:
-  flake-utils.lib.eachSystem [ "x86_64-linux" ] (system: let
-    pkgs = nixpkgs.legacyPackages.${system};
-    gitignoreSrc = pkgs.callPackage inputs.gitignore { };
-  in rec {
-    packages.hello = pkgs.callPackage ./default.nix { inherit gitignoreSrc; };
+  outputs = { self, nixpkgs, flake-utils,  ... }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = import nixpkgs { inherit system; };
+        pname = "rmote";
+        version = "0.1.0"; 
+      in rec {
+        packages.default = pkgs.rustPlatform.buildRustPackage {
+          inherit pname version;
+          src = self;
 
-    legacyPackages = packages;
+          cargoLock.lockFile = ./Cargo.lock;
 
-    defaultPackage = packages.hello;
+          nativeBuildInputs = [ pkgs.pkg-config ];
+          buildInputs = [ pkgs.openssl pkgs.libssh2 pkgs.zlib ];
 
-    devShell = pkgs.mkShell {
-      CARGO_INSTALL_ROOT = "${toString ./.}/.cargo";
+          LIBSSH2_SYS_USE_PKG_CONFIG = "1";
+          OPENSSL_NO_VENDOR = "1";
 
-      buildInputs = with pkgs; [ cargo rustc git ];
-    };
-  });
+          meta = with pkgs.lib; {
+            description = "Sync a local dir to a remote host over SFTP with debounced fs-watching";
+            license = licenses.mit;
+            mainProgram = pname;
+          };
+        };
+
+        apps.default = {
+          type = "app";
+          program = "${packages.default}/bin/${pname}";
+        };
+
+        devShells.default = pkgs.mkShell {
+          nativeBuildInputs = [ pkgs.pkg-config ];
+          buildInputs = [ pkgs.openssl pkgs.libssh2 pkgs.zlib pkgs.rustc pkgs.cargo ];
+          LIBSSH2_SYS_USE_PKG_CONFIG = "1";
+          OPENSSL_NO_VENDOR = "1";
+        };
+
+        checks.default = packages.default;
+      });
 }
