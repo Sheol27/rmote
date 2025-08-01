@@ -9,7 +9,7 @@ repository = "https://github.com/Sheol27/rmote"
 homepage = "https://github.com/Sheol27/rmote"
 documentation = "https://docs.rs/rmote"
 keywords = ["sftp", "mirror", "sync", "deployment", "watch"]
-categories = ["network-programming", "system"]
+categories = ["network-programming"]
 authors = ["Sheol27"]
 include = ["src/**", "Cargo.toml", "README.md", "LICENSE"]
 
