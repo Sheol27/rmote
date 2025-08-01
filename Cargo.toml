@@ -2,10 +2,19 @@
 name = "rmote"
 version = "0.1.0"
 edition = "2024"
+description = "Simple, fast SFTP directory mirror: local → remote"
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/Sheol27/rmote"
+homepage = "https://github.com/Sheol27/rmote"
+documentation = "https://docs.rs/rmote"
+keywords = ["sftp", "mirror", "sync", "deployment", "watch"]
+categories = ["network-programming", "system"]
+authors = ["Sheol27"]
+include = ["src/**", "Cargo.toml", "README.md", "LICENSE"]
 
 [dependencies]
 anyhow = "1.0.98"
 clap = { version = "4.5.42", features = ["derive", "env"] }
-librsync = "0.2.3"
 notify = { version = "8.1.0", features = ["serde"] }
 ssh2 = { version = "0.9.5", features = ["vendored-openssl"] }

@@ -205,27 +205,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1171693293099992e19cddea4e8b849964e9846f4acee11b3948bcc337be8776"
 
 [[package]]
-name = "librsync"
-version = "0.2.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dea2e44fb63800a63512a0bb67eda4e70213d9449039d7243d0d1bfbb5e90a1f"
-dependencies = [
- "libc",
- "librsync-sys",
- "log",
-]
-
-[[package]]
-name = "librsync-sys"
-version = "0.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5a410251d4d41f7696e9e1c8f2c30fbc9022416bc35e9008337ade43bddcf2d4"
-dependencies = [
- "cc",
- "libc",
-]
-
-[[package]]
 name = "libssh2-sys"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -396,7 +375,6 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "clap",
- "librsync",
  "notify",
  "ssh2",
 ]

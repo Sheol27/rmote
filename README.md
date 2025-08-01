@@ -38,6 +38,12 @@ Simple, fast SFTP directory mirror: local → remote
 
 ## Installation
 
+Install with cargo:
+
+```sh
+cargo install rmote
+```
+
 Compile from source with Cargo:
 
 ```sh
