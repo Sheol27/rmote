@@ -1,5 +1,5 @@
 use anyhow::{bail, Context, Result};
-use clap::{ArgAction, Parser};
+use clap::Parser;
 use notify::{RecommendedWatcher, RecursiveMode, Watcher, Event, EventKind};
 use ssh2::{Session, Sftp};
 use std::collections::{HashMap, VecDeque, HashSet};
@@ -12,55 +12,9 @@ use std::thread;
 use std::time::{Duration, Instant};
 use std::env;
 
-/// Simple, fast SFTP directory mirror: local -> remote
-#[derive(Parser, Debug)]
-#[command(name = "rmote", author, version, about)]
-struct Cli {
-    /// Remote host (IP or DNS)
-    #[arg(long, env = "RMOTE_HOST")]
-    host: String,
+mod cli;
 
-    /// Remote SSH port
-    #[arg(long, env = "RMOTE_PORT", default_value = "22")]
-    port: u16,
-
-    /// SSH username
-    #[arg(long, env = "RMOTE_USER", default_value = "root")]
-    user: String,
-
-    /// Path to private key (e.g. ~/.ssh/id_ed25519)
-    #[arg(long, env = "RMOTE_KEY", default_value = "~/.ssh/id_ed25519")]
-    identity: String,
-
-    /// Path to public key (e.g. ~/.ssh/id_ed25519.pub)
-    #[arg(long, env = "RMOTE_PUB", default_value = "~/.ssh/id_ed25519.pub")]
-    identity_pub: String,
-
-    /// Optional passphrase for the private key
-    #[arg(long, env = "RMOTE_PASSPHRASE")]
-    passphrase: Option<String>,
-
-    /// Remote base directory to mirror into (created if needed)
-    #[arg(long, env = "RMOTE_REMOTE_DIR", default_value = ".")]
-    remote_dir: String,
-
-    /// Perform a full sync at startup
-    #[arg(long, action = ArgAction::SetTrue, default_value_t = true)]
-    initial_sync: bool,
-
-    /// Disable full sync at startup
-    #[arg(long, action = ArgAction::SetTrue, overrides_with = "initial_sync")]
-    no_initial_sync: bool,
-
-    /// One or more blacklist entries. May be repeated.
-    /// Matches if a path equals an entry or starts with it.
-    #[arg(long = "blacklist", short = 'x', action = ArgAction::Append)]
-    blacklist: Vec<String>,
-
-    /// Debounce window (seconds) to coalesce events
-    #[arg(long, default_value_t = 1)]
-    debounce_s: u64,
-}
+use cli::Cli;
 
 #[derive(PartialEq, Debug, Copy, Clone)]
 enum Action {
