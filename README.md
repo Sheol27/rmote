@@ -2,21 +2,6 @@
 
 Simple, fast SFTP directory mirror: local → remote
 
-## Table of Contents
-
-* [Description](#description)
-* [Features](#features)
-* [Prerequisites](#prerequisites)
-* [Installation](#installation)
-* [Usage](#usage)
-
-  * [Command-Line Options](#command-line-options)
-* [Examples](#examples)
-* [Blacklist](#blacklist)
-* [Debounce](#debounce)
-* [Contributing](#contributing)
-* [License](#license)
-
 ## Description
 
 `rmote` watches a local directory and mirrors all file and directory changes over SFTP to a remote host. It supports initial full sync, real-time file watching, intelligent event coalescing, and a customizable blacklist of paths to ignore.
